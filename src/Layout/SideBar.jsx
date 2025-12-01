@@ -24,52 +24,7 @@ function Sidebar() {
   ];
 
   return (
-    <>
-      {/* MOBILE TOP NAV */}
-      <div className="lg:hidden fixed top-0 left-0 w-full bg-gray-900 text-white p-4 flex justify-between items-center z-50">
-        <h1 className="text-xl font-bold">HRIS</h1>
-        <button onClick={() => setMobileOpen(true)}>
-          <Menu size={28} />
-        </button>
-      </div>
-
-      {/* MOBILE DRAWER */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ x: "-100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "-100%" }}
-            transition={{ duration: 0.25 }}
-            className="fixed top-0 left-0 bg-gray-900 text-white w-64 h-full p-5 z-50 lg:hidden shadow-2xl"
-          >
-            <div className="flex justify-between items-center mb-5">
-              <h1 className="text-2xl font-bold">HRIS</h1>
-              <button onClick={() => setMobileOpen(false)}>
-                <X size={26} />
-              </button>
-            </div>
-
-            <nav className="flex flex-col gap-3">
-              {menus.map((item) => (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 p-2 rounded transition ${
-                      isActive ? "bg-gray-700" : "hover:bg-gray-700"
-                    }`
-                  }
-                >
-                  <item.icon size={20} />
-                  <span>{item.label}</span>
-                </NavLink>
-              ))}
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div>
 
       {/* DESKTOP SIDEBAR */}
       <motion.div
@@ -115,7 +70,7 @@ function Sidebar() {
           ))}
         </nav>
       </motion.div>
-    </>
+    </div>
   );
 }
 

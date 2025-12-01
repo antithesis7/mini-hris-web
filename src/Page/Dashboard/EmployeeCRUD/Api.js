@@ -15,7 +15,9 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 async function fetchEmployees() {
   const { data, error } = await supabase
     .from("employee")
-    .select("*")
+    .select(`*,
+      position(*),
+      department(*)`)
     .order("id", { ascending: true });
 
   if (error) throw error;

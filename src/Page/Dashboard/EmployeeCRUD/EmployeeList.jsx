@@ -57,9 +57,9 @@ function EmployeeList() {
         <tbody>
           {employees.map((e) => (
             <tr key={e.id}>
-              <td className="border px-3 py-2">{e.full_name}</td>
-              <td className="border px-3 py-2">{e.position}</td>
-              <td className="border px-3 py-2">{e.department}</td>
+              <td className="border px-3 py-2">{`${e.first_name} ${e.last_name}`}</td>
+              <td className="border px-3 py-2">{e.position?.name}</td>
+              <td className="border px-3 py-2">{e.department?.name}</td>
               <td className="border px-3 py-2 flex gap-2">
                 <Link
                   to={`/dashboard/employees/${e.id}`}
