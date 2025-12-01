@@ -74,7 +74,7 @@ function Sidebar() {
       {/* DESKTOP SIDEBAR */}
       <motion.div
         animate={{ width: isOpen ? 240 : 80 }}
-        className="hidden lg:flex fixed top-0 left-0 h-screen bg-gray-900 text-white p-5 flex-col shadow-xl"
+        className="flex h-screen bg-gray-900 text-white p-5 flex-col shadow-xl"
       >
         {/* HEADER */}
         <div className="flex items-center justify-between mb-6">

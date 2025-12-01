@@ -1,11 +1,10 @@
-import DashboardLayout from "../../Layout/DashboardLayout";
 
 function DashboardMain() {
 return (
-    <DashboardLayout>
+    <div>
       <h1 className="text-2xl font-bold">Selamat datang di Dashboard!</h1>
       <p>Ini adalah konten utama dashboard.</p>
-    </DashboardLayout>
+    </div>
   );
 }
 export default DashboardMain;
