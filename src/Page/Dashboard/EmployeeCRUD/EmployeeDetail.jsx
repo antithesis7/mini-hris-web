@@ -48,11 +48,11 @@ function EmployeeDetail() {
       <h1 className="text-xl font-semibold mb-4">Employee Detail</h1>
 
       <div className="space-y-2 border p-4 rounded shadow">
-        <p><b>Full Name:</b> {employee.full_name}</p>
+        <p><b>Full Name:</b> {employee.first_name} {employee.last_name}</p>
         <p><b>Email:</b> {employee.email}</p>
-        <p><b>Position:</b> {employee.position || "-"}</p>
-        <p><b>Department:</b> {employee.department || "-"}</p>
-        <p><b>Join Date:</b> {employee.join_date || "-"}</p>
+        <p><b>Position:</b> {employee.position?.name || "-"}</p>
+        <p><b>Department:</b> {employee.department?.name || "-"}</p>
+        <p><b>Join Date:</b> {employee.hire_date || "-"}</p>
       </div>
 
       <div className="flex items-center gap-2 mt-4">

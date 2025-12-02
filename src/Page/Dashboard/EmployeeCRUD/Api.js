@@ -1,7 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
 
-
 // ===============================
 // 🔧 Supabase Init
 // ===============================
@@ -16,8 +15,8 @@ async function fetchEmployees() {
   const { data, error } = await supabase
     .from("employee")
     .select(`*,
-      position(*),
-      department(*)`)
+      position:position_id ( id, name ),
+      department:department_id ( id, name )`)
     .order("id", { ascending: true });
 
   if (error) throw error;
@@ -30,7 +29,11 @@ async function fetchEmployees() {
 async function getEmployeeById(id) {
   const { data, error } = await supabase
     .from("employee")
-    .select("*")
+    .select(`
+      *,
+      position:position_id ( id, name ),
+      department:department_id ( id, name )
+    `)
     .eq("id", id)
     .single();
 

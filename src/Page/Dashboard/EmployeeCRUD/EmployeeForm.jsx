@@ -4,29 +4,52 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function EmployeeForm() {
   const navigate = useNavigate();
-  const { id } = useParams(); // param edit
-  const isEdit = Boolean(id);
+  const { id } = useParams(); 
+  const isEdit = id !== "new";
 
   const [form, setForm] = useState({
-    full_name: "",
+    name: "",
     email: "",
-    position: "",
-    department: "",
-    join_date: "",
+    position_id: "",
+    department_id: "",
+    hire_date: "",
   });
 
-  // LOAD DATA IF EDIT MODE
+   // Options
+  const [positions, setPositions] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [employees, setEmployees] = useState([]);
+
+   // Load dropdown data (position, dept, employee list)
   useEffect(() => {
-    if (!isEdit) return;
+    async function loadDropdowns() {
+      const [{ data: pos }, { data: dep }, { data: emp }] = await Promise.all([
+        supabase.from("position").select("id, name"),
+        supabase.from("department").select("id, name"),
+        supabase.from("employee").select("id, name"),
+      ]);
+
+      setPositions(pos || []);
+      setDepartments(dep || []);
+      setEmployees(emp || []);
+    }
+
+    loadDropdowns();
+  }, []);
+
+  // LOAD DATA IF EDIT MODE
+    useEffect(() => {
+    if (id === "new") return;
 
     async function load() {
-      const { data } = await supabase
-        .from("employees")
+      const { data, error } = await supabase
+        .from("employee")
         .select("*")
         .eq("id", id)
         .single();
 
       if (data) setForm(data);
+      if (error) console.error(error);
     }
 
     load();
@@ -42,20 +65,52 @@ function EmployeeForm() {
 
   // SUBMIT
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      if (isEdit) {
-        await updateEmployee(id, form);
-      } else {
-        await createEmployee(form);
-      }
+  try {
+    // ------------------------------------------
+    // 1️⃣ Pecah full name → first_name, last_name
+    // ------------------------------------------
+    const fullName = form.name.trim();
+    const parts = fullName.split(" ");
 
-      navigate("/dashboard/employees");
-    } catch (err) {
-      alert("Error: " + err.message);
+    const firstName = parts[0];
+    const lastName = parts.slice(1).join(" "); // bisa kosong kalau 1 kata
+
+    // ------------------------------------------
+    // 2️⃣ Payload untuk Supabase
+    // ------------------------------------------
+    const payload = {
+      email: form.email,
+      position_id: form.position_id,
+      department_id: form.department_id,
+      hire_date: form.hire_date,
+      first_name: firstName,
+      last_name: lastName,
+    };
+
+    // ================================
+    //  EDIT MODE
+    // ================================
+    if (isEdit) {
+      await updateEmployee(id, payload);
+
+    // ================================
+    //  CREATE MODE
+    // ================================
+    } else {
+      await createEmployee({
+        ...payload,
+        hire_date: new Date().toISOString().split("T")[0],
+      });
     }
-  };
+
+    navigate("/dashboard/employees");
+
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
+};
 
   return (
     <div className="p-4 max-w-xl mx-auto">
@@ -64,17 +119,21 @@ function EmployeeForm() {
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-3">
+
+        {/* NAME DROPDOWN */}
         <div>
-          <label className="block mb-1">Full Name</label>
+          <label className="block mb-1">Name</label>
           <input
-            name="full_name"
-            value={form.full_name}
+            name="name"
+            value={form.name}
             onChange={handleChange}
+            autoComplete="off"
             className="border px-3 py-2 rounded w-full"
             required
           />
         </div>
 
+        {/* EMAIL */}
         <div>
           <label className="block mb-1">Email</label>
           <input
@@ -87,34 +146,50 @@ function EmployeeForm() {
           />
         </div>
 
+        {/* POSITION DROPDOWN */}
         <div>
           <label className="block mb-1">Position</label>
-          <input
-            name="position"
-            value={form.position}
+          <select
+            name="position_id"
+            value={form.position_id}
             onChange={handleChange}
             className="border px-3 py-2 rounded w-full"
-          />
+            required
+          >
+            <option value="">Select Position</option>
+            {positions.map((p) => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
         </div>
 
+        {/* DEPARTMENT DROPDOWN */}
         <div>
           <label className="block mb-1">Department</label>
-          <input
-            name="department"
-            value={form.department}
+          <select
+            name="department_id"
+            value={form.department_id}
             onChange={handleChange}
             className="border px-3 py-2 rounded w-full"
-          />
+            required
+          >
+            <option value="">Select Department</option>
+            {departments.map((d) => (
+              <option key={d.id} value={d.id}>{d.name}</option>
+            ))}
+          </select>
         </div>
 
+        {/* HIRE DATE - jika create → otomatis hari ini */}
         <div>
-          <label className="block mb-1">Join Date</label>
+          <label className="block mb-1">Hire Date</label>
           <input
-            name="join_date"
+            name="hire_date"
             type="date"
-            value={form.join_date || ""}
+            value={form.hire_date || ""}
             onChange={handleChange}
             className="border px-3 py-2 rounded w-full"
+            disabled={!isEdit} // hanya bisa diubah jika edit
           />
         </div>
 
