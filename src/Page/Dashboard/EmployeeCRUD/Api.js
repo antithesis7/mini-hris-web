@@ -24,6 +24,22 @@ async function fetchEmployees() {
 }
 
 // ===============================
+// 📌 SEARCH EMPLOYEES (RPC)
+// ===============================
+async function searchEmployees(keyword) {
+  const { data, error } = await supabase.rpc("search_employees", {
+    keyword: keyword || "",
+  });
+
+  if (error) {
+    console.error("RPC Search Error:", error);
+    return [];
+  }
+
+  return data;
+}
+
+// ===============================
 // 📌 GET EMPLOYEE BY ID
 // ===============================
 async function getEmployeeById(id) {
@@ -69,6 +85,33 @@ async function updateEmployee(id, payload) {
 }
 
 // ===============================
+// 📌 GET ALL DEPARTMENTS
+// ===============================
+async function fetchDepartments() {
+  const { data, error } = await supabase
+    .from("department")
+    .select("*")
+    .order("name", { ascending: true });
+
+  if (error) throw error;
+  return data;
+}
+
+// ===============================
+// 📌 GET ALL POSITION
+// ===============================
+async function fetchPositions() {
+  const { data, error } = await supabase
+    .from("position")
+    .select("*")
+    .order("level", { ascending: true });
+
+  if (error) throw error;
+  return data;
+}
+
+
+// ===============================
 // 📌 DELETE EMPLOYEE
 // ===============================
 async function deleteEmployee(id) {
@@ -88,4 +131,7 @@ export {
   createEmployee,
   updateEmployee,
   deleteEmployee,
+  searchEmployees,
+  fetchDepartments,
+  fetchPositions
 };
