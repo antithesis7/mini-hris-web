@@ -2,6 +2,19 @@ import { useEffect, useState } from "react";
 import { createEmployee, updateEmployee, supabase } from "./Api";
 import { useNavigate, useParams } from "react-router-dom";
 
+/* form employee sanitizer */
+function cleanEmployeeRecord(record) {
+  if (!record) return {};
+
+  return {
+    name: record.name || "",
+    email: record.email || "",
+    position_id: record.position_id || "",
+    department_id: record.department_id || "",
+    hire_date: record.hire_date || "",
+  };
+}
+
 function EmployeeForm() {
   const navigate = useNavigate();
   const { id } = useParams(); 
@@ -48,7 +61,7 @@ function EmployeeForm() {
         .eq("id", id)
         .single();
 
-      if (data) setForm(data);
+      if (data) setForm(cleanEmployeeRecord(data));
       if (error) console.error(error);
     }
 

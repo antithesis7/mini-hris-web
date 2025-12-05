@@ -1,7 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
 import { fetchEmployees, deleteEmployee, 
         searchEmployees, fetchDepartments, fetchPositions } from "./Api";
+import EmployeeModal from "./EmployeeModal";
 import { Link } from "react-router-dom";
+
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
@@ -13,6 +15,9 @@ function EmployeeList() {
 
   const [page, setPage] = useState(1);
   const pageSize = 10;
+
+  const [showModal, setShowModal] = useState(false);
+  const [editId, setEditId] = useState(null);
 
   // =========================
   // LOAD EMPLOYEES
@@ -103,22 +108,18 @@ function EmployeeList() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-
-          <button
-            onClick={load}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl shadow-sm transition"
-          >
-            Search
-          </button>
         </div>
-
-        {/* Add Employee */}
-        <Link
-          to="/dashboard/employees/new"
+          
+        {/* ADD EMPLOYEE BUTTON MODAL */}
+        <button
+          onClick={() => {
+            setEditId(null);    
+            setShowModal(true);
+          }}
           className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl shadow-sm transition ml-auto sm:ml-0"
         >
           + Add Employee
-        </Link>
+        </button>
       </div>
 
       {/* FILTER BAR */}
@@ -197,9 +198,16 @@ function EmployeeList() {
                     <Link to={`/dashboard/employees/${e.id}`} className="text-blue-600 hover:underline">
                       Detail
                     </Link>
-                    <Link to={`/dashboard/employees/edit/${e.id}`} className="text-green-600 hover:underline">
+                    {/* EDIT BUTTON USING MODAL */}
+                    <button
+                      onClick={() => {
+                        setEditId(e.id);
+                        setShowModal(true);
+                      }}
+                      className="text-green-600 hover:underline"
+                    >
                       Edit
-                    </Link>
+                    </button>
                     <button
                       onClick={() => handleDelete(e.id)}
                       className="text-red-600 hover:underline"
@@ -246,6 +254,14 @@ function EmployeeList() {
           </div>
         </div>
       )}
+
+      {/* EMPLOYEE MODAL */}
+      <EmployeeModal
+        show={showModal}
+        employeeId={editId}
+        onClose={() => setShowModal(false)}
+        onSaved={() => load()}
+      />
     </div>
   );
 }

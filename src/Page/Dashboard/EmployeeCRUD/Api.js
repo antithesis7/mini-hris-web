@@ -9,6 +9,22 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_APIKEY;
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // ===============================
+// 🧹 SANITIZER — hanya ambil kolom asli employee
+// ===============================
+function cleanEmployeePayload(data) {
+  if (!data) return {};
+
+  return {
+    first_name: data.first_name || "",
+    last_name: data.last_name || "",
+    email: data.email || "",
+    position_id: data.position_id || null,
+    department_id: data.department_id || null,
+    hire_date: data.hire_date || null,
+  };
+}
+
+// ===============================
 // 📌 GET ALL EMPLOYEES
 // ===============================
 async function fetchEmployees() {
@@ -61,9 +77,10 @@ async function getEmployeeById(id) {
 // 📌 CREATE EMPLOYEE
 // ===============================
 async function createEmployee(payload) {
+  const body = cleanEmployeePayload(payload);
   const { data, error } = await supabase
     .from("employee")
-    .insert([payload])
+    .insert(body)
     .select();
 
   if (error) throw error;
@@ -74,9 +91,10 @@ async function createEmployee(payload) {
 // 📌 UPDATE EMPLOYEE
 // ===============================
 async function updateEmployee(id, payload) {
+  const body = cleanEmployeePayload(payload);
   const { data, error } = await supabase
     .from("employee")
-    .update(payload)
+    .update(body)
     .eq("id", id)
     .select();
 

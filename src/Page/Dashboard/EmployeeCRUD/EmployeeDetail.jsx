@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import { getEmployeeById } from "./Api";
 import { useParams, useNavigate } from "react-router-dom";
+import EmployeeModal from "./EmployeeModal";
 
 function EmployeeDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [showModal, setShowModal] = useState(false);
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);
+  const handleSaved = async () => {
+    const data = await getEmployeeById(id);
+    setEmployee(data);
+  };
+
 
   // LOAD DETAIL DATA
   useEffect(() => {
@@ -84,7 +90,7 @@ function EmployeeDetail() {
       <div className="flex items-center gap-3 mt-6">
         <button
           className="bg-blue-600 hover:bg-blue-700 transition text-white px-5 py-2.5 rounded-xl shadow-sm"
-          onClick={() => navigate(`/dashboard/employees/edit/${id}`)}
+          onClick={() => setShowModal(true)}
         >
           Edit Employee
         </button>
@@ -96,6 +102,14 @@ function EmployeeDetail() {
           Back
         </button>
       </div>
+
+           {/* EDIT MODAL */}
+      <EmployeeModal
+        show={showModal}
+        employeeId={id}
+        onClose={() => setShowModal(false)}
+        onSaved={handleSaved}
+      /> 
     </div>
   );
 }
