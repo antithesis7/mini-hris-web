@@ -1,6 +1,7 @@
 import Modal from "../../../Components/Modal";
 import { useState, useEffect } from "react";
 import { createEmployee, updateEmployee, getEmployeeById } from "./Api";
+import { supabase } from "../../../Config/Supabase";
 
 function EmployeeModal({ show, onClose, employeeId, onSaved }) {
   const isEdit = !!employeeId;
@@ -12,7 +13,23 @@ function EmployeeModal({ show, onClose, employeeId, onSaved }) {
     phone: "",
     department_id: "",
     position_id: "",
+    salary: "",
   });
+
+  const [departments, setDepartments] = useState([]);
+  const [positions, setPositions] = useState([]);
+
+  useEffect(() => {
+    async function loadDropdown() {
+      const { data: deps } = await supabase.from("department").select("*");
+      const { data: pos } = await supabase.from("position").select("*");
+
+      setDepartments(deps || []);
+      setPositions(pos || []);
+    }
+
+    loadDropdown();
+  }, []);
 
   // Load data jika edit
   useEffect(() => {
@@ -80,6 +97,51 @@ function EmployeeModal({ show, onClose, employeeId, onSaved }) {
           value={form.phone}
           onChange={handleChange}
         />
+
+        <div className="col-span-2">
+          <label className="block mb-1">Salary</label>
+          <input
+            name="salary"
+            type="number"
+            placeholder="Salary"
+            className="border px-3 py-2 rounded w-full"
+            value={form.salary || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* POSITION */}
+        <div className="mb-3">
+          <label className="block mb-1">Position</label>
+          <select
+            name="position_id"
+            value={form.position_id}
+            onChange={handleChange}
+            className="border px-3 py-2 rounded w-full"
+          >
+            <option value="">Select Position</option>
+            {positions.map((p) => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* DEPARTMENT */}
+        <div className="mb-3">
+          <label className="block mb-1">Department</label>
+          <select
+            name="department_id"
+            value={form.department_id}
+            onChange={handleChange}
+            className="border px-3 py-2 rounded w-full"
+          >
+            <option value="">Select Department</option>
+            {departments.map((d) => (
+              <option key={d.id} value={d.id}>{d.name}</option>
+            ))}
+          </select>
+        </div>
+
       </div>
 
       <div className="flex justify-end gap-2 mt-6">

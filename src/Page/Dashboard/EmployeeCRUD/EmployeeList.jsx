@@ -53,7 +53,7 @@ function EmployeeList() {
     }, 400);
 
     return () => clearTimeout(handler);
-  }, [search, departmentFilter]);
+  }, [search, departmentFilter, filterPos, positions, departments]);
 
   // =========================
   // LOAD FIRST TIME + DEPARTMENTS
@@ -96,56 +96,77 @@ function EmployeeList() {
   return (
     <div className="p-6 w-full">
 
-      {/* HEADER BAR */}
-      <div className="flex flex-col sm:flex-row items-center justify-between mb-4 gap-3">
-        
-        {/* Search */}
-        <div className="flex gap-2 w-full sm:w-auto">
-          <input
-            className="border border-gray-300 px-4 py-2 rounded-xl shadow-sm focus:outline-none 
-                       focus:ring-2 focus:ring-blue-500 w-full sm:w-72"
-            placeholder="Search employee by name, email, department..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-          
-        {/* ADD EMPLOYEE BUTTON MODAL */}
-        <button
-          onClick={() => {
-            setEditId(null);    
-            setShowModal(true);
-          }}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl shadow-sm transition ml-auto sm:ml-0"
-        >
-          + Add Employee
-        </button>
-      </div>
+     {/* HEADER */}
+<div className="flex items-center justify-between mb-6">
+  <div>
+    <h1 className="text-2xl font-semibold">All Employees</h1>
+    <p className="text-gray-500 text-sm">Manage and track all employees</p>
+  </div>
 
-      {/* FILTER BAR */}
-      <div className="flex gap-4 mb-4">
-        <select
-          value={departmentFilter}
-          onChange={(e) => setDepartmentFilter(e.target.value)}
-          className="border px-3 py-2 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="">All Departments</option>
-          {departments.map((d) => (
-            <option key={d.id} value={d.name}>{d.name}</option>
-          ))}
-        </select>
+  {/* ADD EMPLOYEE BUTTON */}
+  <button
+    onClick={() => {
+      setEditId(null);
+      setShowModal(true);
+    }}
+    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl shadow-sm flex items-center gap-2 transition"
+  >
+    + Add Employee
+  </button>
+</div>
 
-         <select
-          value={filterPos}
-          onChange={(e) => setFilterPos(e.target.value)}
-          className="border px-3 py-2 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="">All Positions</option>
-          {positions.map((p) => (
-            <option key={p.id} value={p.name}>{p.name}</option>
-          ))}
-        </select>
-      </div>
+
+{/* FILTER BOX (mirip gambar) */}
+<div className="
+  w-full bg-white p-4 rounded-xl shadow-sm border 
+  flex flex-wrap items-center gap-3
+">
+
+  {/* SEARCH */}
+   <div className="relative flex-1 min-w-[220px]">
+    <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
+    <input
+      className="border border-gray-300 pl-10 pr-3 py-2 rounded-xl w-full 
+                 focus:ring-2 focus:ring-blue-500"
+      placeholder="Search employees..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+  </div>
+
+  {/* STATUS FILTER EXAMPLE (optional) */}
+  {/* <select className="border px-3 py-2 rounded-xl shadow-sm">
+    <option>In Progress</option>
+    <option>Completed</option>
+  </select> */}
+
+  {/* POSITION FILTER */}
+  <select
+    value={filterPos}
+    onChange={(e) => setFilterPos(e.target.value)}
+    className="border px-3 py-2 rounded-xl focus:ring-2 focus:ring-blue-500 
+               min-w-[180px]"
+  >
+    <option value="">All Positions</option>
+    {positions.map((p) => (
+      <option key={p.id} value={p.name}>{p.name}</option>
+    ))}
+  </select>
+
+  {/* DEPARTMENT FILTER */}
+  <select
+    value={departmentFilter}
+    onChange={(e) => setDepartmentFilter(e.target.value)}
+    className="border px-3 py-2 rounded-xl focus:ring-2 focus:ring-blue-500 
+               min-w-[180px]"
+  >
+    <option value="">All Departments</option>
+    {departments.map((d) => (
+      <option key={d.id} value={d.name}>{d.name}</option>
+    ))}
+  </select>
+</div>
+
 
       {/* TABLE */}
       <div className="bg-white shadow-md rounded-xl overflow-hidden border border-gray-200">
@@ -195,9 +216,9 @@ function EmployeeList() {
                 {/* ACTIONS */}
                 <td className="px-4 py-3 border-b">
                   <div className="flex justify-center gap-3">
-                    <Link to={`/dashboard/employees/${e.id}`} className="text-blue-600 hover:underline">
+                    {/* <Link to={`/dashboard/employees/${e.id}`} className="text-blue-600 hover:underline">
                       Detail
-                    </Link>
+                    </Link> */}
                     {/* EDIT BUTTON USING MODAL */}
                     <button
                       onClick={() => {
