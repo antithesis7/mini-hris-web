@@ -12,6 +12,10 @@ function EmployeeList() {
   const [departments, setDepartments] = useState([]);
   const [positions, setPositions] = useState([]);
   const [filterPos, setFilterPos] = useState("");
+  const [pendingSearch, setPendingSearch] = useState("");
+  const [pendingDepartment, setPendingDepartment] = useState("");
+  const [pendingPosition, setPendingPosition] = useState("");
+
 
   const [page, setPage] = useState(1);
   const pageSize = 10;
@@ -117,20 +121,16 @@ function EmployeeList() {
 
 
 {/* FILTER BOX (mirip gambar) */}
-<div className="
-  w-full bg-white p-4 rounded-xl shadow-sm border 
-  flex flex-wrap items-center gap-3
-">
+<div className="w-full bg-white p-4 rounded-xl shadow-sm border flex flex-wrap items-center gap-3">
 
   {/* SEARCH */}
    <div className="relative flex-1 min-w-[220px]">
     <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
     <input
-      className="border border-gray-300 pl-10 pr-3 py-2 rounded-xl w-full 
-                 focus:ring-2 focus:ring-blue-500"
+      className="border border-gray-300 pl-10 pr-3 py-2 rounded-xl w-full focus:ring-2 focus:ring-blue-500"
       placeholder="Search employees..."
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
+      value={pendingSearch}
+      onChange={(e) => setPendingSearch(e.target.value)}
     />
   </div>
 
@@ -141,11 +141,10 @@ function EmployeeList() {
   </select> */}
 
   {/* POSITION FILTER */}
-  <select
-    value={filterPos}
-    onChange={(e) => setFilterPos(e.target.value)}
-    className="border px-3 py-2 rounded-xl focus:ring-2 focus:ring-blue-500 
-               min-w-[180px]"
+   <select
+    value={pendingPosition}
+    onChange={(e) => setPendingPosition(e.target.value)}
+    className="border px-3 py-2 rounded-xl focus:ring-2 focus:ring-blue-500 min-w-[180px]"
   >
     <option value="">All Positions</option>
     {positions.map((p) => (
@@ -155,16 +154,27 @@ function EmployeeList() {
 
   {/* DEPARTMENT FILTER */}
   <select
-    value={departmentFilter}
-    onChange={(e) => setDepartmentFilter(e.target.value)}
-    className="border px-3 py-2 rounded-xl focus:ring-2 focus:ring-blue-500 
-               min-w-[180px]"
+    value={pendingDepartment}
+    onChange={(e) => setPendingDepartment(e.target.value)}
+    className="border px-3 py-2 rounded-xl focus:ring-2 focus:ring-blue-500 min-w-[180px]"
   >
     <option value="">All Departments</option>
     {departments.map((d) => (
       <option key={d.id} value={d.name}>{d.name}</option>
     ))}
   </select>
+
+   {/* FILTER BUTTON */}
+  <button
+    onClick={() => {
+      setSearch(pendingSearch);
+      setFilterPos(pendingPosition);
+      setDepartmentFilter(pendingDepartment);
+    }}
+    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl shadow-sm transition"
+  >
+    Filter
+  </button>
 </div>
 
 

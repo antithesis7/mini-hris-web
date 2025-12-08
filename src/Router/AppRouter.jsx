@@ -5,6 +5,7 @@ import DashboardLayout from "../Layout/DashboardLayout";
 import DashboardMain from "../Page/Dashboard/DashboardMain";
 import Attendance from "../Page/Dashboard/Attendance";
 import DepartmentPage from "../Page/DepartmentPages/DepartmentPage";
+import PositionPage from "../Page/PositionPages/PositionPage";
 import Settings from "../Page/Dashboard/Settings";
 
 import EmployeeList from "../Page/Dashboard/Employee/EmployeeList";
@@ -41,7 +42,8 @@ const router = createBrowserRouter([
       // other dashboard pages
       { path: "attendance", element: <Attendance /> },
       { path: "settings", element: <Settings /> },
-      {path: "department", element: <DepartmentPage />,},
+      { path: "department", element: <DepartmentPage />,},
+      { path: "position", element: <PositionPage /> },
 
       // Employee CRUD
       { path: "employees", element: <EmployeeList /> },           // /dashboard/employees
