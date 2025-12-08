@@ -95,7 +95,7 @@ function DepartmentPage() {
           <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
           <input
             className="border border-gray-300 pl-10 pr-3 py-2 rounded-xl w-full focus:ring-2 focus:ring-blue-500"
-            placeholder="Search departments... press Enter to search"
+            placeholder="Search departments... (Press Enter to search)"
             value={pendingSearch}
             onChange={(e) => setPendingSearch(e.target.value)}
             onKeyDown={(e) => {
