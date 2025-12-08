@@ -9,6 +9,7 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Building2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -20,6 +21,7 @@ function Sidebar() {
     { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { label: "Attendance", path: "/dashboard/attendance", icon: CalendarCheck },
     { label: "Employees", path: "/dashboard/employees", icon: Users },
+    { label: "Department", path: "/dashboard/department", icon: Building2 },
     { label: "Settings", path: "/dashboard/settings", icon: Settings },
   ];
 

@@ -4,11 +4,12 @@ import LoginPage from "../Page/Auth/LoginPage";
 import DashboardLayout from "../Layout/DashboardLayout";
 import DashboardMain from "../Page/Dashboard/DashboardMain";
 import Attendance from "../Page/Dashboard/Attendance";
+import DepartmentPage from "../Page/DepartmentPages/DepartmentPage";
 import Settings from "../Page/Dashboard/Settings";
 
-import EmployeeList from "../Page/Dashboard/EmployeeCRUD/EmployeeList";
-import EmployeeForm from "../Page/Dashboard/EmployeeCRUD/EmployeeForm";
-import EmployeeDetail from "../Page/Dashboard/EmployeeCRUD/EmployeeDetail";
+import EmployeeList from "../Page/Dashboard/Employee/EmployeeList";
+import EmployeeForm from "../Page/Dashboard/Employee/EmployeeForm";
+import EmployeeDetail from "../Page/Dashboard/Employee/EmployeeDetail";
 
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
       // other dashboard pages
       { path: "attendance", element: <Attendance /> },
       { path: "settings", element: <Settings /> },
+      {path: "department", element: <DepartmentPage />,},
 
       // Employee CRUD
       { path: "employees", element: <EmployeeList /> },           // /dashboard/employees
