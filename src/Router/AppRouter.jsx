@@ -6,6 +6,8 @@ import DashboardMain from "../Page/Dashboard/DashboardMain";
 import Attendance from "../Page/Dashboard/Attendance";
 import DepartmentPage from "../Page/DepartmentPages/DepartmentPage";
 import PositionPage from "../Page/PositionPages/PositionPage";
+import LeaveListPage from "../Page/LeavePages/LeaveListPage";
+import LeaveFormPage from "../Page/LeavePages/LeaveFormPage";
 import Settings from "../Page/Dashboard/Settings";
 
 import EmployeeList from "../Page/Dashboard/Employee/EmployeeList";
@@ -44,6 +46,11 @@ const router = createBrowserRouter([
       { path: "settings", element: <Settings /> },
       { path: "department", element: <DepartmentPage />,},
       { path: "position", element: <PositionPage /> },
+      { path: "leaves", element: <LeaveListPage /> },
+
+      // Leave Management
+      { path: "leaves/new", element: <LeaveFormPage /> },
+      { path: "leaves/edit/:id", element: <LeaveFormPage /> },
 
       // Employee CRUD
       { path: "employees", element: <EmployeeList /> },           // /dashboard/employees
