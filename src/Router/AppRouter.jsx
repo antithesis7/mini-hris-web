@@ -3,9 +3,10 @@ import LoginPage from "../Page/Auth/LoginPage";
 
 import DashboardLayout from "../Layout/DashboardLayout";
 import DashboardMain from "../Page/Dashboard/DashboardMain";
-import Attendance from "../Page/Dashboard/Attendance";
 import DepartmentPage from "../Page/DepartmentPages/DepartmentPage";
 import PositionPage from "../Page/PositionPages/PositionPage";
+import AttendanceListPage from "../Page/AttendancePages/AttendanceListPage";
+import AttendanceTodayPage from "../Page/AttendancePages/AttendanceTodayPage";
 import LeaveListPage from "../Page/LeavePages/LeaveListPage";
 import LeaveFormPage from "../Page/LeavePages/LeaveFormPage";
 import Settings from "../Page/Dashboard/Settings";
@@ -42,10 +43,11 @@ const router = createBrowserRouter([
       { index: true, element: <DashboardMain /> },
 
       // other dashboard pages
-      { path: "attendance", element: <Attendance /> },
       { path: "settings", element: <Settings /> },
       { path: "department", element: <DepartmentPage />,},
       { path: "position", element: <PositionPage /> },
+      { path: "attendance", element: <AttendanceListPage /> },
+      { path: "attendance/today", element: <AttendanceTodayPage /> },
       { path: "leaves", element: <LeaveListPage /> },
 
       // Leave Management

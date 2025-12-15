@@ -12,6 +12,7 @@ import {
   Building2,
   Briefcase,
   CalendarX,
+  Clock,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -21,10 +22,10 @@ function Sidebar() {
 
   const menus = [
     { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-    { label: "Attendance", path: "/dashboard/attendance", icon: CalendarCheck },
     { label: "Employees", path: "/dashboard/employees", icon: Users },
     { label: "Department", path: "/dashboard/department", icon: Building2 },
     { label: "Position", path: "/dashboard/position", icon: Briefcase },
+    { label: "Attendance Today", path: "/dashboard/attendance/today", icon: Clock },
     { label: "Leave Management", path: "/dashboard/leaves", icon: CalendarX },
     // { label: "Settings", path: "/dashboard/settings", icon: Settings },
   ];
