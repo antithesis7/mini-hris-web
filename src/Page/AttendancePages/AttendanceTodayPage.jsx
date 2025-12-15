@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useAttendance from "../../Hooks/UseAttendanceHooks";
+import useAttendance from "../../Hooks/UseAttendance";
 
 function AttendanceTodayPage() {
   const { doCheckInToday } = useAttendance();

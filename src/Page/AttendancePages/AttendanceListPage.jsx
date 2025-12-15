@@ -1,4 +1,4 @@
-import useAttendance from "../../Hooks/UseAttendanceHooks";
+import useAttendance from "../../Hooks/UseAttendance";
 import AttendanceTable from "../../Components/AttendanceComponents/AttendanceTableComponent";
 
 function AttendanceListPage() {
