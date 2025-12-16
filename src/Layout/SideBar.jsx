@@ -55,6 +55,7 @@ function Sidebar() {
             <NavLink
               key={item.path}
               to={item.path}
+              end={item.path === "/dashboard"}
               className={({ isActive }) =>
                 `flex items-center gap-3 p-2 rounded transition ${
                   isActive ? "bg-gray-700" : "hover:bg-gray-700"

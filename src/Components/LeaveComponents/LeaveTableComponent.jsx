@@ -1,7 +1,7 @@
 import LeaveStatusBadge from "./LeaveStatusBadgeComponent";
 import { formatDate } from "../../Utils/FormatDate";
 
-function LeaveTable({ data, onEdit, onDelete }) {
+function LeaveTable({ data, onApprove, onReject }) {
   return (
     <table className="w-full text-sm">
       <thead className="bg-gray-50 text-gray-700">
@@ -49,20 +49,26 @@ function LeaveTable({ data, onEdit, onDelete }) {
               <LeaveStatusBadge status={leave.status} />
             </td>
 
-            <td className="px-4 py-3 text-center space-x-3">
-              <button
-                onClick={() => onEdit(leave)}
-                className="text-blue-600 hover:underline"
-              >
-                Edit
-              </button>
+            <td className="p-2 border">
+              {leave.status?.toLowerCase() === "pending" ? (
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => onApprove(leave.id)}
+                    className="text-green-600 hover:underline"
+                  >
+                    Approve
+                  </button>
 
-              <button
-                onClick={() => onDelete(leave.id)}
-                className="text-red-600 hover:underline"
-              >
-                Delete
-              </button>
+                  <button
+                    onClick={() => onReject(leave.id)}
+                    className="text-red-600 hover:underline"
+                  >
+                    Reject
+                  </button>
+                </div>
+              ) : (
+                <span className="text-gray-400 text-sm">No action</span>
+              )}
             </td>
           </tr>
         ))}

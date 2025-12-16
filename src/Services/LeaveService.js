@@ -1,4 +1,19 @@
 import { supabase } from "../Config/supabase";
+import { LEAVE_STATUS } from "../Utils/Constants";
+
+export async function approveLeave(id) {
+  return supabase
+    .from("leaves")
+    .update({ status: LEAVE_STATUS.APPROVED })
+    .eq("id", id);
+}
+
+export async function rejectLeave(id) {
+  return supabase
+    .from("leaves")
+    .update({ status: LEAVE_STATUS.REJECTED })
+    .eq("id", id);
+}
 
 // 🔹 Fetch all leaves
 const fetchLeaves = async () => {

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import {
   fetchLeaves,
   createLeave,
+  approveLeave,
+  rejectLeave,
   updateLeave,
   deleteLeave,
 } from "../Services/LeaveService";
@@ -46,6 +48,16 @@ function useLeaves() {
     loadLeaves();
   }, []);
 
+  const approve = async (id) => {
+  await approveLeave(id);
+  loadLeaves();
+  };
+
+  const reject = async (id) => {
+  await rejectLeave(id);
+  loadLeaves();
+  };
+
   return {
     leaves,
     loading,
@@ -54,6 +66,8 @@ function useLeaves() {
     addLeave,
     editLeave,
     removeLeave,
+    approve,
+    reject,
   };
 }
 

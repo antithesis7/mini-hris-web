@@ -13,6 +13,8 @@ function LeaveListPage() {
     addLeave,
     editLeave,
     loadLeaves,
+    approve,
+    reject,
   } = useLeaves();
 
   const [showModal, setShowModal] = useState(false);
@@ -120,8 +122,8 @@ function LeaveListPage() {
         ) : (
           <LeaveTable
             data={paginatedLeaves}
-            onEdit={openEditModal}
-            onDelete={handleDelete}
+            onApprove={approve}
+            onReject={reject}
           />
         )}
       </div>
