@@ -1,4 +1,4 @@
-import { supabase } from "../Config/supabase";
+import { supabase } from "../Config/Supabase";
 
 async function fetchPositions() {
   const { data, error } = await supabase

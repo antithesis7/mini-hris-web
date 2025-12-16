@@ -9,6 +9,7 @@ import AttendanceListPage from "../Page/AttendancePages/AttendanceListPage";
 import AttendanceTodayPage from "../Page/AttendancePages/AttendanceTodayPage";
 import LeaveListPage from "../Page/LeavePages/LeaveListPage";
 import LeaveFormPage from "../Page/LeavePages/LeaveFormPage";
+import WorkShiftPage from "../Page/WorkShiftPages/WorkShiftPage";
 import Settings from "../Page/Dashboard/Settings";
 
 import EmployeeList from "../Page/Dashboard/Employee/EmployeeList";
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
       { path: "attendance", element: <AttendanceListPage /> },
       { path: "attendance/today", element: <AttendanceTodayPage /> },
       { path: "leaves", element: <LeaveListPage /> },
+      { path: "work-shifts", element: <WorkShiftPage /> },
 
       // Leave Management
       { path: "leaves/new", element: <LeaveFormPage /> },

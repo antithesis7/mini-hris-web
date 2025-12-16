@@ -180,7 +180,6 @@ function EmployeeList() {
 
       {/* TABLE */}
       <div className="bg-white shadow-md rounded-xl overflow-hidden border border-gray-200">
-
         <table className="w-full text-left">
           <thead className="bg-gray-50">
             <tr className="text-gray-700">

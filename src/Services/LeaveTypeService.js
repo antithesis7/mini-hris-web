@@ -1,4 +1,4 @@
-import { supabase } from "../Config/supabase";
+import { supabase } from "../Config/Supabase";
 
 export const fetchLeaveTypes = async () => {
   const { data, error } = await supabase

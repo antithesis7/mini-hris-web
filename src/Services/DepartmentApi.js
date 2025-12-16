@@ -1,4 +1,4 @@
-import { supabase } from "../Config/supabase";
+import { supabase } from "../Config/Supabase";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_APIKEY;

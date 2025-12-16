@@ -1,4 +1,4 @@
-import { supabase } from "../Config/supabase";
+import { supabase } from "../Config/Supabase";
 import { LEAVE_STATUS } from "../Utils/Constants";
 
 export async function approveLeave(id) {
