@@ -26,7 +26,7 @@ function Sidebar() {
     { label: "Employees", path: "/dashboard/employees", icon: Users },
     { label: "Department", path: "/dashboard/department", icon: Building2 },
     { label: "Position", path: "/dashboard/position", icon: Briefcase },
-    { label: "Attendance Today", path: "/dashboard/attendance/today", icon: Clock },
+    { label: "Attendance", path: "/dashboard/attendance/today", icon: Clock },
     { label: "Work Shifts", path: "/dashboard/work-shifts", icon: Timer },
     { label: "Leave Management", path: "/dashboard/leaves", icon: CalendarX },
     // { label: "Settings", path: "/dashboard/settings", icon: Settings },

@@ -6,7 +6,7 @@ import DashboardMain from "../Page/Dashboard/DashboardMain";
 import DepartmentPage from "../Page/DepartmentPages/DepartmentPage";
 import PositionPage from "../Page/PositionPages/PositionPage";
 import AttendanceListPage from "../Page/AttendancePages/AttendanceListPage";
-import AttendanceTodayPage from "../Page/AttendancePages/AttendanceTodayPage";
+import AttendancePage from "../Page/AttendancePages/AttendancePage";
 import LeaveListPage from "../Page/LeavePages/LeaveListPage";
 import LeaveFormPage from "../Page/LeavePages/LeaveFormPage";
 import WorkShiftPage from "../Page/WorkShiftPages/WorkShiftPage";
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
       { path: "department", element: <DepartmentPage />,},
       { path: "position", element: <PositionPage /> },
       { path: "attendance", element: <AttendanceListPage /> },
-      { path: "attendance/today", element: <AttendanceTodayPage /> },
+      { path: "attendance/today", element: <AttendancePage /> },
       { path: "leaves", element: <LeaveListPage /> },
       { path: "work-shifts", element: <WorkShiftPage /> },
 
