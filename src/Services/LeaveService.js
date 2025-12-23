@@ -3,14 +3,14 @@ import { LEAVE_STATUS } from "../Utils/Constants";
 
 export async function approveLeave(id) {
   return supabase
-    .from("leaves")
+    .from("employee_leaves")
     .update({ status: LEAVE_STATUS.APPROVED })
     .eq("id", id);
 }
 
 export async function rejectLeave(id) {
   return supabase
-    .from("leaves")
+    .from("employee_leaves")
     .update({ status: LEAVE_STATUS.REJECTED })
     .eq("id", id);
 }

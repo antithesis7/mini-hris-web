@@ -7,7 +7,7 @@ function AttendancePage() {
   const { doCheckInToday } = useAttendance();
   const [loading, setLoading] = useState(false);
 
-  const EMPLOYEE_ID = 5;
+  const EMPLOYEE_ID = 6;
 
   const { summary, loading: summaryLoading, reloadSummary } =
     useAttendanceSummary();

@@ -81,7 +81,10 @@ export const checkInToday = async (employee_id, note = null) => {
 
   const lateLimit = new Date(start);
   lateLimit.setMinutes(lateLimit.getMinutes() + schedule.late_tolerance_minutes);
-
+  console.warn(`check logic`,{
+    now,
+    lateLimit
+  });
   const status = now > lateLimit ? "late" : "present";
 
   // 6️⃣ UPDATE jika record sudah ada (scheduler)
@@ -147,12 +150,23 @@ export const checkOutByAttendanceId = async (attendance_id) => {
 
 export async function fetchAttendanceSummary(date = null) {
   const targetDate =
-    date || new Date().toISOString().split("T")[0];
+  typeof date === "string" && date.length
+    ? date
+    : new Date().toISOString().split("T")[0];
+
+  const { count: onLeaveCount, error: leaveError } = await supabase
+    .from("employee_leaves")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "approved")
+    .lte("start_date", targetDate)
+    .gte("end_date", targetDate);
+
+  if (leaveError) throw leaveError;
 
   // 1️⃣ TOTAL EMPLOYEE (INI KUNCI)
   const { count: totalEmployees, error: empError } = await supabase
     .from("employee")
-    .select("*", { count: "exact", head: true });
+    .select("id", { count: "exact", head: true });
 
   if (empError) throw empError;
 
@@ -175,13 +189,14 @@ export async function fetchAttendanceSummary(date = null) {
   });
 
   const absent =
-    totalEmployees - (present + late + onLeave);
+    totalEmployees - (present + late + onLeave);  
 
   return {
     totalEmployees,
     present,
     late,
     absent,
-    onLeave,
+    onLeave: onLeaveCount,
+    absent: Math.max(absent, 0),
   };
 }
