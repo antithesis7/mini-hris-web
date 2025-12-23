@@ -9,40 +9,45 @@ export default function Card({
 }) {
   return (
     <div
-      className={`bg-white border rounded-xl shadow-sm p-4 ${className}`}
+      className={`
+        bg-white
+        border
+        rounded-xl
+        shadow-sm
+        p-5
+        flex
+        items-center
+        justify-between
+        ${className}
+      `}
     >
-      {(title || icon) && (
-        <div className="flex items-start justify-between">
-          <div>
-            {title && (
-              <p className="text-sm font-medium text-gray-500">
-                {title}
-              </p>
-            )}
-            {subtitle && (
-              <p className="text-xs text-gray-400 mt-1">
-                {subtitle}
-              </p>
-            )}
-          </div>
+      <div>
+        {title && (
+          <p className="text-sm font-medium text-gray-500">
+            {title}
+          </p>
+        )}
 
-          {icon && (
-            <div className="text-xl text-gray-400">
-              {icon}
-            </div>
-          )}
+        {value !== undefined && (
+          <p className={`mt-2 text-3xl font-semibold ${valueColor}`}>
+            {value}
+          </p>
+        )}
+
+        {subtitle && (
+          <p className="text-xs text-gray-400 mt-1">
+            {subtitle}
+          </p>
+        )}
+
+        {children}
+      </div>
+
+      {icon && (
+        <div className="text-2xl text-gray-400 ml-4">
+          {icon}
         </div>
       )}
-
-      {value && (
-        <p
-          className={`mt-3 text-3xl font-semibold ${valueColor}`}
-        >
-          {value}
-        </p>
-      )}
-
-      {children && <div className="mt-4">{children}</div>}
     </div>
   );
 }

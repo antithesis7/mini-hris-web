@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createEmployee, updateEmployee, supabase } from "./Api";
+import { createEmployee, updateEmployee } from "./Api";
 import { useNavigate, useParams } from "react-router-dom";
 
 /* form employee sanitizer */

@@ -1,12 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "../../../Config/Supabase";
 
-
-// ===============================
-// 🔧 Supabase Init
-// ===============================
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_APIKEY;
-export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // ===============================
 // 🧹 SANITIZER — hanya ambil kolom asli employee

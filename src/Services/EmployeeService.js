@@ -1,9 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_APIKEY;
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from "../Config/Supabase";
 
 // ==============================
 // GET ALL EMPLOYEES
@@ -73,7 +68,7 @@ async function deleteEmployee(id) {
 }
 
 async function testEmployeeService() {
-  const { data, error } = await supabase.from("employees").select("*").limit(1);
+  const { data, error } = await supabase.from("employee").select("*").limit(1);
 
   console.log("TEST DATA:", data);
   console.log("TEST ERROR:", error);

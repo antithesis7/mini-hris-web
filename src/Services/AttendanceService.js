@@ -149,43 +149,39 @@ export async function fetchAttendanceSummary(date = null) {
   const targetDate =
     date || new Date().toISOString().split("T")[0];
 
-  const { data, error } = await supabase
+  // 1️⃣ TOTAL EMPLOYEE (INI KUNCI)
+  const { count: totalEmployees, error: empError } = await supabase
+    .from("employee")
+    .select("*", { count: "exact", head: true });
+
+  if (empError) throw empError;
+
+  // 2️⃣ ATTENDANCE HARI INI
+  const { data: attendance, error } = await supabase
     .from("attendance")
     .select("status")
     .eq("attendance_date", targetDate);
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
 
-  const summary = {
-    totalEmployees: 0,
-    present: 0,
-    late: 0,
-    absent: 0,
-    onLeave: 0,
-  };
+  let present = 0;
+  let late = 0;
+  let onLeave = 0;
 
-  data.forEach(({ status }) => {
-    summary.totalEmployees++;
-
-    switch (status) {
-      case "present":
-        summary.present++;
-        break;
-      case "late":
-        summary.late++;
-        break;
-      case "absent":
-        summary.absent++;
-        break;
-      case "leave":
-        summary.onLeave++;
-        break;
-      default:
-        break;
-    }
+  attendance.forEach(({ status }) => {
+    if (status === "present") present++;
+    if (status === "late") late++;
+    if (status === "leave") onLeave++;
   });
 
-  return summary;
+  const absent =
+    totalEmployees - (present + late + onLeave);
+
+  return {
+    totalEmployees,
+    present,
+    late,
+    absent,
+    onLeave,
+  };
 }

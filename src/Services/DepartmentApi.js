@@ -1,8 +1,5 @@
 import { supabase } from "../Config/Supabase";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_APIKEY;
-
 // GET all
 async function fetchDepartments() {
   const { data, error } = await supabase

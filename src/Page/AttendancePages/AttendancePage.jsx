@@ -5,15 +5,20 @@ import StatCard from "../../Components/Cards/StatCard";
 
 function AttendancePage() {
   const { doCheckInToday } = useAttendance();
-  const { summary, loading: summaryLoading } = useAttendanceSummary();
   const [loading, setLoading] = useState(false);
 
-  const EMPLOYEE_ID = 1;
+  const EMPLOYEE_ID = 5;
+
+  const { summary, loading: summaryLoading, reloadSummary } =
+    useAttendanceSummary();
 
   const handleCheckIn = async () => {
     setLoading(true);
     try {
       await doCheckInToday(EMPLOYEE_ID);
+
+      await reloadSummary(); // 🔥 WAJIB
+
       alert("Check-in berhasil");
     } catch (e) {
       alert(e.message);
@@ -26,7 +31,7 @@ function AttendancePage() {
     <div className="p-6">
       {/* Attendance Summary */}
       {summary && (
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+        <div className="grid grid-cols-5 gap-4 mb-6">
           <StatCard title="Total Employees" value={summary.totalEmployees} />
           <StatCard title="Present" value={summary.present} variant="success" />
           <StatCard title="Late" value={summary.late} variant="warning" />
