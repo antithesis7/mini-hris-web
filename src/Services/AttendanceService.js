@@ -200,3 +200,30 @@ export async function fetchAttendanceSummary(date = null) {
     absent: Math.max(absent, 0),
   };
 }
+
+export async function fetchTodayAttendance(date = null) {
+  const targetDate =
+    date || new Date().toISOString().split("T")[0];
+
+  const { data, error } = await supabase
+    .from("attendance")
+    .select(`
+      id,
+      attendance_date,
+      check_in,
+      check_out,
+      status,
+      employee:employee_id (
+        id,
+        first_name,
+        last_name,
+        email
+      )
+    `)
+    .eq("attendance_date", targetDate)
+    .in("status", ["present", "late"])
+    .order("check_in", { ascending: true });
+
+  if (error) throw error;
+  return data;
+}
