@@ -48,18 +48,18 @@ function AttendancePage() {
 
       {/* Check-in Section */}
       <div className="max-w-md">
-        <h1 className="text-2xl font-semibold mb-2">Attendance Today</h1>
+        {/* <h1 className="text-2xl font-semibold mb-2">Attendance Today</h1>
         <p className="text-gray-500 mb-6">
           Click button below to check-in today
-        </p>
+        </p> */}
 
       <div className="mt-8">
-  <h2 className="text-lg font-semibold mb-4">
+  {/* <h2 className="text-lg font-semibold mb-4">
     Attendance Today
-  </h2>
+  </h2> */}
 
       <div className="bg-white shadow-md rounded-xl overflow-hidden border border-gray-200">
-        <table className="w-full text-left text-sm">
+        <table className="w-full text-left">
           <thead className="bg-gray-50">
             <tr className="text-gray-700">
               <th className="px-4 py-3 border-b">Employee</th>
@@ -113,13 +113,13 @@ function AttendancePage() {
       </div>
       </div>
 
-        <button
+        {/* <button
           onClick={handleCheckIn}
           disabled={loading}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl shadow-sm transition"
         >
           {loading ? "Processing..." : "Check In"}
-        </button>
+        </button> */}
       </div>
     </div>
   );

@@ -15,6 +15,18 @@ export async function rejectLeave(id) {
     .eq("id", id);
 }
 
+export const checkActiveLeave = async (employeeId) => {
+  const { data, error } = await supabase
+    .from("employee_leaves")
+    .select("id")
+    .eq("employee_id", employeeId)
+    .in("status", ["pending", "approved"])
+    .limit(1);
+
+  if (error) throw error;
+  return data.length > 0;
+};
+
 // 🔹 Fetch all leaves
 const fetchLeaves = async () => {
   const { data, error } = await supabase
@@ -53,8 +65,40 @@ const fetchLeaveById = async (id) => {
   return data;
 };
 
-// 🔹 Create
-const createLeave = async (payload) => {
+// ✅ CREATE ATAU UPDATE (ANTI DUPLIKASI)
+const createOrUpdateLeave = async (payload) => {
+  const { employee_id } = payload;
+  // 1️⃣ Cek leave aktif (pending / approved)
+  const { data: existingLeave, error: fetchError } = await supabase
+    .from("employee_leaves")
+    .select("id")
+    .eq("employee_id", employee_id)
+    .in("status", [
+      LEAVE_STATUS.PENDING,
+      LEAVE_STATUS.APPROVED,
+    ])
+    .maybeSingle();
+
+  if (fetchError) throw fetchError;
+
+  // 2️⃣ Jika sudah ada → UPDATE
+  if (existingLeave) {
+    const { data, error } = await supabase
+      .from("employee_leaves")
+      .update({
+        ...payload,
+        status: LEAVE_STATUS.PENDING,
+        updated_at: new Date(),
+      })
+      .eq("id", existingLeave.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  // 3️⃣ Jika belum ada → INSERT
   const { data, error } = await supabase
     .from("employee_leaves")
     .insert(payload)
@@ -92,7 +136,7 @@ const deleteLeave = async (id) => {
 export {
   fetchLeaves,
   fetchLeaveById,
-  createLeave,
+  createOrUpdateLeave,
   updateLeave,
   deleteLeave,
 };

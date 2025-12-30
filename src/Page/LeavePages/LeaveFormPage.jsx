@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { LEAVE_TYPES } from "../../Utils/Constants";
+import { checkActiveLeave, createOrUpdateLeave } from "../../Services/LeaveService";
+import { toast } from "react-hot-toast";
 
 function LeaveForm({ initialData, onClose, addLeave, updateLeave }) {
   const [form, setForm] = useState({
@@ -29,17 +31,50 @@ function LeaveForm({ initialData, onClose, addLeave, updateLeave }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.employee_id) return alert("Employee wajib diisi");
-    if (!form.start_date || !form.end_date)
-      return alert("Tanggal wajib diisi");
-
-    if (initialData) {
-      await updateLeave(initialData.id, form);
-    } else {
-      await addLeave(form);
+    if (!form.employee_id) {
+      toast.error("Employee wajib diisi");
+      return;
     }
 
-    onClose();
+    if (!form.start_date || !form.end_date) {
+      toast.error("Tanggal wajib diisi");
+      return;
+    }
+
+  try {
+      // 🔴 STEP 1 — CEK ACTIVE LEAVE (HANYA SAAT CREATE)
+      if (!initialData) {
+        const hasActiveLeave = await checkActiveLeave(
+          form.employee_id
+        );
+
+        if (hasActiveLeave) {
+          toast.error(
+            "Anda sudah memiliki pengajuan cuti aktif"
+          );
+          return; // ⛔ STOP TOTAL
+        }
+      }
+
+      // 🟢 STEP 2 — CREATE / UPDATE
+      if (initialData) {
+        await updateLeave(initialData.id, form);
+        toast.success(
+          "Pengajuan cuti berhasil diperbarui"
+        );
+      } else {
+        await addLeave(form);
+        toast.success(
+          "Pengajuan cuti berhasil dibuat"
+        );
+      }
+
+      onClose();
+    } catch (err) {
+      toast.error(
+        err.message || "Terjadi kesalahan sistem"
+      );
+    }
   };
 
   return (

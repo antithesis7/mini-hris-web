@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   fetchLeaves,
-  createLeave,
+  createOrUpdateLeave,
   approveLeave,
   rejectLeave,
   updateLeave,
@@ -27,7 +27,7 @@ function useLeaves() {
   };
 
   const addLeave = async (formData) => {
-    const { data, error } = await createLeave(formData);
+    const { data, error } = await createOrUpdateLeave(formData);
     if (!error) loadLeaves();
     return { data, error };
   };
