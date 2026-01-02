@@ -203,7 +203,11 @@ export async function fetchAttendanceSummary(date = null) {
 
 export async function fetchTodayAttendance(date) {
   const targetDate =
-    date || new Date().toISOString().split("T")[0];
+    typeof date === "string" && date.length === 10
+      ? date
+      : new Date().toISOString().split("T")[0];
+
+  console.log("ADMIN ATTENDANCE DATE:", targetDate);
 
   const { data, error } = await supabase
     .from("attendance")
@@ -213,6 +217,7 @@ export async function fetchTodayAttendance(date) {
       check_in,
       check_out,
       status,
+      note,
       employee:employee_id (
         id,
         first_name,
@@ -221,9 +226,8 @@ export async function fetchTodayAttendance(date) {
       )
     `)
     .eq("attendance_date", targetDate)
-    .in("status", ["present", "late"])
-    .order("check_in", { ascending: true });
+    .order("employee_id", { ascending: true });
 
   if (error) throw error;
-  return data;
+  return data || [];
 }
