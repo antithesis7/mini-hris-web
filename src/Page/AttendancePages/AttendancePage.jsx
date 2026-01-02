@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import useAttendance from "../../Hooks/UseAttendance";
 import useAttendanceSummary from "../../Hooks/UseAttendanceSummary";
 import StatCard from "../../Components/Cards/StatCard";
@@ -6,36 +6,34 @@ import useTodayAttendance from "../../Hooks/UseTodayAttendance";
 
 function AttendancePage() {
   const { doCheckInToday } = useAttendance();
+
+  // 🔹 FILTER DATE (DEFAULT: TODAY)
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+
+  // 🔹 PAGINATION
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+
   const {
-      data: todayAttendance,
-      loading: todayLoading,
-  } = useTodayAttendance();
-  
-  const [loading, setLoading] = useState(false);
+    data: todayAttendance = [],
+    loading: todayLoading,
+  } = useTodayAttendance(selectedDate);
 
-  const EMPLOYEE_ID = 6;
+  const { summary } = useAttendanceSummary();
 
-  const { summary, loading: summaryLoading, reloadSummary } =
-    useAttendanceSummary();
+  // 🔹 PAGINATED DATA
+  const paginatedAttendance = useMemo(() => {
+    const start = (page - 1) * pageSize;
+    return todayAttendance.slice(start, start + pageSize);
+  }, [todayAttendance, page]);
 
-  const handleCheckIn = async () => {
-    setLoading(true);
-    try {
-      await doCheckInToday(EMPLOYEE_ID);
-
-      await reloadSummary(); // 🔥 WAJIB
-
-      alert("Check-in berhasil");
-    } catch (e) {
-      alert(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const totalPages = Math.ceil(todayAttendance.length / pageSize);
 
   return (
-    <div className="p-6">
-      {/* Attendance Summary */}
+    <div className="p-6 w-full">
+      {/* ================= SUMMARY ================= */}
       {summary && (
         <div className="grid grid-cols-5 gap-4 mb-6">
           <StatCard title="Total Employees" value={summary.totalEmployees} />
@@ -46,20 +44,30 @@ function AttendancePage() {
         </div>
       )}
 
-      {/* Check-in Section */}
-      <div className="max-w-md">
-        {/* <h1 className="text-2xl font-semibold mb-2">Attendance Today</h1>
-        <p className="text-gray-500 mb-6">
-          Click button below to check-in today
-        </p> */}
+      {/* ================= HEADER ================= */}
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h1 className="text-2xl font-semibold">Attendance</h1>
+          <p className="text-gray-500 text-sm">
+            Daily attendance records
+          </p>
+        </div>
 
-      <div className="mt-8">
-  {/* <h2 className="text-lg font-semibold mb-4">
-    Attendance Today
-  </h2> */}
+        {/* DATE FILTER */}
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={(e) => {
+            setSelectedDate(e.target.value);
+            setPage(1);
+          }}
+          className="border px-4 py-2 rounded-xl focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
+      {/* ================= TABLE ================= */}
       <div className="bg-white shadow-md rounded-xl overflow-hidden border border-gray-200">
-        <table className="w-full text-left">
+        <table className="w-full text-left text-sm">
           <thead className="bg-gray-50">
             <tr className="text-gray-700">
               <th className="px-4 py-3 border-b">Employee</th>
@@ -70,27 +78,23 @@ function AttendancePage() {
           </thead>
 
           <tbody>
-            {todayAttendance.map((row) => (
+            {paginatedAttendance.map((row) => (
               <tr
                 key={row.id}
                 className="hover:bg-gray-50 transition"
               >
-                {/* EMPLOYEE */}
                 <td className="px-4 py-3 border-b font-medium">
                   {row.employee.first_name} {row.employee.last_name}
                 </td>
 
-                {/* CHECK IN */}
-                <td className="px-4 py-3 border-b text-gray-700">
+                <td className="px-4 py-3 border-b">
                   {row.check_in || "-"}
                 </td>
 
-                {/* CHECK OUT */}
-                <td className="px-4 py-3 border-b text-gray-700">
+                <td className="px-4 py-3 border-b">
                   {row.check_out || "-"}
                 </td>
 
-                {/* STATUS */}
                 <td className="px-4 py-3 border-b capitalize">
                   {row.status}
                 </td>
@@ -98,29 +102,46 @@ function AttendancePage() {
             ))}
 
             {/* EMPTY STATE */}
-            {!todayAttendance.length && !todayLoading && (
+            {!paginatedAttendance.length && !todayLoading && (
               <tr>
                 <td
                   colSpan={4}
                   className="text-center py-6 text-gray-500"
                 >
-                  No attendance today
+                  No attendance found
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
-      </div>
 
-        {/* <button
-          onClick={handleCheckIn}
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl shadow-sm transition"
-        >
-          {loading ? "Processing..." : "Check In"}
-        </button> */}
-      </div>
+      {/* ================= PAGINATION ================= */}
+      {todayAttendance.length > pageSize && (
+        <div className="flex justify-between items-center mt-4">
+          <p className="text-sm text-gray-600">
+            Page {page} of {totalPages}
+          </p>
+
+          <div className="flex gap-2">
+            <button
+              onClick={() => page > 1 && setPage(page - 1)}
+              className="px-4 py-2 border rounded-xl hover:bg-gray-100"
+            >
+              Prev
+            </button>
+
+            <button
+              onClick={() =>
+                page < totalPages && setPage(page + 1)
+              }
+              className="px-4 py-2 border rounded-xl hover:bg-gray-100"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

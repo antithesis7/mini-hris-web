@@ -201,7 +201,7 @@ export async function fetchAttendanceSummary(date = null) {
   };
 }
 
-export async function fetchTodayAttendance(date = null) {
+export async function fetchTodayAttendance(date) {
   const targetDate =
     date || new Date().toISOString().split("T")[0];
 
