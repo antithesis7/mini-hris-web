@@ -21,7 +21,7 @@ function AttendancePage() {
     loading: todayLoading,
   } = useTodayAttendance(selectedDate);
 
-  const { summary } = useAttendanceSummary();
+  const { summary } = useAttendanceSummary(selectedDate);
 
   // 🔹 PAGINATED DATA
   const paginatedAttendance = useMemo(() => {
