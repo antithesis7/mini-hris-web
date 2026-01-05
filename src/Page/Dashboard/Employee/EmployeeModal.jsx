@@ -91,6 +91,15 @@ function EmployeeModal({ show, onClose, employeeId, onSaved }) {
         />
 
         <input
+          type="password"
+          placeholder="Type your password"
+          className="border p-2 rounded col-span-2"
+          onChange={(e) =>
+            setForm({ ...form, password: e.target.value })
+          }
+        />
+
+        <input
           name="phone"
           placeholder="Phone"
           className="border p-2 rounded col-span-2"

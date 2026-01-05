@@ -71,13 +71,37 @@ async function getEmployeeById(id) {
 // ===============================
 async function createEmployee(payload) {
   const body = cleanEmployeePayload(payload);
+
+  /**
+   * 1. AUTH SIGN UP
+   * Gunakan email & password dari payload
+   */
+  const { data: authData, error: authError } =
+    await supabase.auth.signUp({
+      email: body.email,
+      password: payload.password, // password TIDAK disimpan ke employee
+    });
+
+  if (authError) throw authError;
+
+  const user = authData.user;
+  if (!user) throw new Error("Auth user not created");
+
+  /**
+   * 2. INSERT EMPLOYEE
+   */
   const { data, error } = await supabase
     .from("employee")
-    .insert(body)
-    .select();
+    .insert({
+      ...body,
+      auth_id: user.id,
+    })
+    .select()
+    .single();
 
   if (error) throw error;
-  return data[0];
+
+  return data;
 }
 
 // ===============================

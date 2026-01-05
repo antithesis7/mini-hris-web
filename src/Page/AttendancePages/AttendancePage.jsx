@@ -47,10 +47,10 @@ function AttendancePage() {
       {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-2xl font-semibold">Attendance</h1>
+          {/* <h1 className="text-2xl font-semibold">Attendance</h1>
           <p className="text-gray-500 text-sm">
             Daily attendance records
-          </p>
+          </p> */}
         </div>
 
         {/* DATE FILTER */}
