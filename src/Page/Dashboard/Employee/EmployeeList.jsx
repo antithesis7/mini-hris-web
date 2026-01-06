@@ -3,9 +3,22 @@ import { fetchEmployees, deleteEmployee,
         searchEmployees, fetchDepartments, fetchPositions } from "./Api";
 import EmployeeModal from "./EmployeeModal";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../Context/AuthContext";
 
 
 function EmployeeList() {
+  const { permissions, loading } = useAuth();
+  const canView = permissions.includes("view_employee");
+  const canCreate = permissions.includes("create_employee");
+  const canEdit = permissions.includes("edit_employee");
+  const canDelete = permissions.includes("delete_employee");
+
+  if (loading) return null;
+
+  // PAGE GUARD
+  if (!canView) {
+    return <div className="p-6 text-red-600">403 - Access Denied</div>;
+  }
   const [employees, setEmployees] = useState([]);
   const [search, setSearch] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
@@ -108,6 +121,7 @@ function EmployeeList() {
   </div>
 
   {/* ADD EMPLOYEE BUTTON */}
+{canCreate && (
   <button
     onClick={() => {
       setEditId(null);
@@ -117,6 +131,7 @@ function EmployeeList() {
   >
     + Add Employee
   </button>
+)}
 </div>
 
 
@@ -229,21 +244,25 @@ function EmployeeList() {
                       Detail
                     </Link> */}
                     {/* EDIT BUTTON USING MODAL */}
-                    <button
-                      onClick={() => {
-                        setEditId(e.id);
-                        setShowModal(true);
-                      }}
-                      className="text-green-600 hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(e.id)}
-                      className="text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
+                    {canEdit && (
+                      <button
+                        onClick={() => {
+                          setEditId(e.id);
+                          setShowModal(true);
+                        }}
+                        className="text-green-600 hover:underline"
+                      >
+                        Edit
+                      </button>
+                    )}
+                    {canDelete && (
+                      <button
+                        onClick={() => handleDelete(e.id)}
+                        className="text-red-600 hover:underline"
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>
