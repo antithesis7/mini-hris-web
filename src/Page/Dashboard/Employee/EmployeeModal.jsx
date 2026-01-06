@@ -14,18 +14,22 @@ function EmployeeModal({ show, onClose, employeeId, onSaved }) {
     department_id: "",
     position_id: "",
     salary: "",
+    active_roles: "",
   });
 
   const [departments, setDepartments] = useState([]);
   const [positions, setPositions] = useState([]);
+  const [roles, setRoles] = useState([]);
 
   useEffect(() => {
     async function loadDropdown() {
       const { data: deps } = await supabase.from("department").select("*");
       const { data: pos } = await supabase.from("position").select("*");
+      const { data: roleData } = await supabase.from("roles").select("id, name");
 
       setDepartments(deps || []);
       setPositions(pos || []);
+      setRoles(roleData || []);
     }
 
     loadDropdown();
@@ -151,6 +155,23 @@ function EmployeeModal({ show, onClose, employeeId, onSaved }) {
           </select>
         </div>
 
+
+        {/* ACTIVE ROLES DROPDOWN */}
+        <div className="mb-3 col-span-2">
+          <label className="block mb-1">Active Role</label>
+          <select
+            name="active_roles"
+            value={form.active_roles}
+            onChange={handleChange}
+            className="border px-3 py-2 rounded w-full"
+            required
+          >
+            <option value="">Select Role</option>
+            {roles.map((r) => (
+              <option key={r.id} value={r.id}>{r.name}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="flex justify-end gap-2 mt-6">

@@ -5,6 +5,7 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [detailUser, setDetailUser] = useState(null);
   const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +18,20 @@ export function AuthProvider({ children }) {
 
     if (data?.user) {
       setUser(data.user);
-      await loadPermissions(data.user.id);
+      // Ambil auth_id dari tabel employee
+      const { data: empData, error: empError } = await supabase
+        .from("employee")
+        .select(`*, roles:active_roles(id, name, description)`)
+        .eq("auth_id", data.user.id)
+        .single();
+
+      if (empData && empData.auth_id) {
+        setDetailUser(empData);
+        await loadPermissions(empData.auth_id);
+      } else {
+        // fallback jika tidak ada employee
+        await loadPermissions(data.user.id);
+      }
     }
 
     setLoading(false);
@@ -34,8 +48,31 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // Access matrix
+  const accessMatrix = {
+    admin: ["Employee", "Department", "Position", "Work Shifts"],
+    hr: ["Attendance", "Leave Management", "Work Shifts"],
+    supervisor: ["Attendance", "Leave Management"],
+    employee: ["Attendance:own"], // hanya data miliknya sendiri
+  };
+
+  // Fungsi untuk cek akses
+  function hasAccess(role, module, options = {}) {
+    // Gunakan roles.name dari detailUser jika ada
+    let effectiveRole = role;
+    if (detailUser?.roles?.name) {
+      effectiveRole = detailUser.roles.name;
+    }
+    if (!effectiveRole) return false;
+    const allowed = accessMatrix[effectiveRole] || [];
+    if (effectiveRole === "employee" && module === "Attendance" && options.own) {
+      return allowed.includes("Attendance:own");
+    }
+    return allowed.includes(module);
+  }
+
   return (
-    <AuthContext.Provider value={{ user, permissions, loading }}>
+    <AuthContext.Provider value={{ user, detailUser,permissions, loading, accessMatrix, hasAccess }}>
       {children}
     </AuthContext.Provider>
   );

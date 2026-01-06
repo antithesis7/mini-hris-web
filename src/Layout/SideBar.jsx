@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuth } from "../Context/AuthContext";
 import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -20,17 +21,35 @@ import { motion, AnimatePresence } from "framer-motion";
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, loading, hasAccess } = useAuth();
 
+  // Ambil role dari detailUser?.roles?.name jika ada, fallback ke user metadata
+  const { detailUser } = useAuth();
+  const role = detailUser?.roles?.name || null;
+  console.warn("User Role in Sidebar:", role);
+
+  // Definisi menu dan mapping ke modul accessMatrix
   const menus = [
-    { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-    { label: "Employees", path: "/dashboard/employees", icon: Users },
-    { label: "Department", path: "/dashboard/department", icon: Building2 },
-    { label: "Position", path: "/dashboard/position", icon: Briefcase },
-    { label: "Attendance", path: "/dashboard/attendance/today", icon: Clock },
-    { label: "Work Shifts", path: "/dashboard/work-shifts", icon: Timer },
-    { label: "Leave Management", path: "/dashboard/leaves", icon: CalendarX },
-    // { label: "Settings", path: "/dashboard/settings", icon: Settings },
+    { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard, module: null },
+    { label: "Employees", path: "/dashboard/employees", icon: Users, module: "Employee" },
+    { label: "Department", path: "/dashboard/department", icon: Building2, module: "Department" },
+    { label: "Position", path: "/dashboard/position", icon: Briefcase, module: "Position" },
+    { label: "Attendance", path: "/dashboard/attendance/today", icon: Clock, module: "Attendance" },
+    { label: "Work Shifts", path: "/dashboard/work-shifts", icon: Timer, module: "Work Shifts" },
+    { label: "Leave Management", path: "/dashboard/leaves", icon: CalendarX, module: "Leave Management" },
+    // { label: "Settings", path: "/dashboard/settings", icon: Settings, module: null },
   ];
+
+  // Filter menu sesuai akses
+  const filteredMenus = menus.filter((item) => {
+    if (!item.module) return true; // Dashboard dan menu tanpa module selalu tampil
+    if (!role) return false;
+    // Attendance khusus employee hanya jika Attendance:own
+    if (item.module === "Attendance" && role === "employee") {
+      return hasAccess(role, "Attendance", { own: true });
+    }
+    return hasAccess(role, item.module);
+  });
 
   return (
     <div>
@@ -53,7 +72,7 @@ function Sidebar() {
 
         {/* NAV ITEMS */}
         <nav className="flex flex-col gap-3">
-          {menus.map((item) => (
+          {filteredMenus.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}

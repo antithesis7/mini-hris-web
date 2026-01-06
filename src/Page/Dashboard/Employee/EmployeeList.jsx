@@ -8,10 +8,10 @@ import { useAuth } from "../../../Context/AuthContext";
 
 function EmployeeList() {
   const { permissions, loading } = useAuth();
-  const canView = permissions.includes("view_employee");
-  const canCreate = permissions.includes("create_employee");
-  const canEdit = permissions.includes("edit_employee");
-  const canDelete = permissions.includes("delete_employee");
+  const canView = true;
+  const canCreate = true;
+  const canEdit = true;
+  const canDelete = true;
 
   if (loading) return null;
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createEmployee, updateEmployee } from "./Api";
 import { useNavigate, useParams } from "react-router-dom";
+import { supabase } from "../../../Config/Supabase";
 
 /* form employee sanitizer */
 function cleanEmployeeRecord(record) {
@@ -12,6 +13,7 @@ function cleanEmployeeRecord(record) {
     position_id: record.position_id || "",
     department_id: record.department_id || "",
     hire_date: record.hire_date || "",
+    active_roles: record.active_roles || "",
   };
 }
 
@@ -26,7 +28,11 @@ function EmployeeForm() {
     position_id: "",
     department_id: "",
     hire_date: "",
+    active_roles: "",
   });
+
+  // Roles options
+  const [roles, setRoles] = useState([]);
 
    // Options
   const [positions, setPositions] = useState([]);
@@ -36,15 +42,22 @@ function EmployeeForm() {
    // Load dropdown data (position, dept, employee list)
   useEffect(() => {
     async function loadDropdowns() {
-      const [{ data: pos }, { data: dep }, { data: emp }] = await Promise.all([
+      const [
+        { data: pos },
+        { data: dep },
+        { data: emp },
+        { data: role }
+      ] = await Promise.all([
         supabase.from("position").select("id, name"),
         supabase.from("department").select("id, name"),
         supabase.from("employee").select("id, name"),
+        supabase.from("roles").select("id, name"),
       ]);
 
       setPositions(pos || []);
       setDepartments(dep || []);
       setEmployees(emp || []);
+      setRoles(role || []);
     }
 
     loadDropdowns();
@@ -189,6 +202,24 @@ function EmployeeForm() {
             <option value="">Select Department</option>
             {departments.map((d) => (
               <option key={d.id} value={d.id}>{d.name}</option>
+            ))}
+          </select>
+        </div>
+
+
+        {/* ACTIVE ROLES DROPDOWN */}
+        <div>
+          <label className="block mb-1">Active Role</label>
+          <select
+            name="active_roles"
+            value={form.active_roles}
+            onChange={handleChange}
+            className="border px-3 py-2 rounded w-full"
+            required
+          >
+            <option value="">Select Role</option>
+            {roles.map((r) => (
+              <option key={r.id} value={r.id}>{r.name}</option>
             ))}
           </select>
         </div>
