@@ -14,6 +14,7 @@ function cleanEmployeePayload(data) {
     position_id: data.position_id || null,
     department_id: data.department_id || null,
     hire_date: data.hire_date || null,
+    active_roles: data.active_roles || null,
   };
 }
 
