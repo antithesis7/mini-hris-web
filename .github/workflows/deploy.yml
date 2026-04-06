@@ -1,4 +1,4 @@
-name: Deploy via FTP baru
+name: Deploy via FTP test V.1.0.1
 
 on:
   push:
