@@ -10,7 +10,7 @@ jobs:
     name: Upload to FTP Server
     runs-on: ubuntu-latest
 
-    stepss:
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
