@@ -1,4 +1,4 @@
-name: Deploy via FTP test V.1.0.2
+name: Deploy via FTP test V.1.0.3
 
 on:
   push:
