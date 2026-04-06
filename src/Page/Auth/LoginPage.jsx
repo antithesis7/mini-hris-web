@@ -56,6 +56,7 @@ export default function LoginPage() {
             Sign in to your account
           </p>
 
+
           {/* Form */}
           <form className="mt-6 space-y-5" onSubmit={handleLogin}>
 
@@ -167,6 +168,10 @@ export default function LoginPage() {
             >
               {loading ? "Signing in..." : "Sign In →"}
             </button>
+            
+            <p className="text-center text-white mt-2">
+            V.1.0.0
+          </p>
           </form>
 
         </div>
