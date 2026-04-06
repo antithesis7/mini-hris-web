@@ -170,7 +170,7 @@ export default function LoginPage() {
             </button>
             
             <p className="text-center text-white mt-2">
-            V.1.0.3
+            V.1.0.4
           </p>
           </form>
 
