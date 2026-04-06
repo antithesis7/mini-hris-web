@@ -28,9 +28,9 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT || 21 }}
           local-dir: ./dist/
-          Server-dirt: /aul.anbyaali.com/
+          Server-dir: /aul.anbyaali.com/
           dangerous-clean-slate: true
-          exclute: |
+          exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
